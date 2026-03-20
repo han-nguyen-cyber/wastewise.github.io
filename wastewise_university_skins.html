@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* UNIVERSITY SKIN SYSTEM */
+:root{
+  --c1:#00c896;--c2:#00a87d;--c1-dim:#e6faf4;--c1-text:#007a5a;
+  --bg:#f8f7f4;--surface:#fff;--surface2:#f2f1ee;
+  --ink:#0f0f0f;--ink2:#6b6b6b;--ink3:#a8a8a8;--border:#e8e6e1;
+  --uni-name:'WasteWise';
+}
+body.isu{--c1:#cc0000;--c2:#a30000;--c1-dim:#ffeaea;--c1-text:#8b0000;--uni-name:'ISU Redbirds'}
+body.uiuc{--c1:#13294b;--c2:#0d1f38;--c1-dim:#e8ecf5;--c1-text:#13294b;--uni-accent:#e84a27;--uni-accent-dim:#fdeee9}
+body.northwestern{--c1:#4e2a84;--c2:#3a1f63;--c1-dim:#f0ebfa;--c1-text:#3a1f63}
+body.uchicago{--c1:#800000;--c2:#600000;--c1-dim:#ffeaea;--c1-text:#600000}
+body.depaul{--c1:#005587;--c2:#003d63;--c1-dim:#e6f2ff;--c1-text:#003d63}
+body.default{--c1:#00c896;--c2:#00a87d;--c1-dim:#e6faf4;--c1-text:#007a5a}
+
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;transition:background .4s,color .4s}
+
+/* SKIN SWITCHER */
+.skin-bar{background:var(--ink);padding:10px 20px;display:flex;align-items:center;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.skin-bar-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap;margin-right:4px}
+.skin-btn{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;font-family:inherit;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;transition:.2s;white-space:nowrap}
+.skin-btn:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.skin-btn.active{color:#fff;border-color:transparent}
+.skin-btn.s-wastewise.active{background:#00c896}
+.skin-btn.s-isu.active{background:#cc0000}
+.skin-btn.s-uiuc.active{background:#13294b}
+.skin-btn.s-northwestern.active{background:#4e2a84}
+.skin-btn.s-uchicago.active{background:#800000}
+.skin-btn.s-depaul.active{background:#005587}
+
+/* NAV */
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;transition:.3s}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-mark{width:30px;height:30px;border-radius:9px;background:var(--c1);display:flex;align-items:center;justify-content:center;transition:.3s}
+.logo-mark svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2.2}
+.logo-text{font-weight:800;font-size:16px;letter-spacing:-0.4px}
+.logo-text .accent{color:var(--c1);transition:.3s}
+.uni-badge{font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;background:var(--c1-dim);color:var(--c1-text);transition:.3s;display:none}
+body:not(.default) .uni-badge{display:inline-block}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-cta{font-size:12px;font-weight:700;padding:7px 16px;background:var(--c1);color:#fff;border-radius:20px;border:none;font-family:inherit;cursor:pointer;transition:.3s}
+
+/* MAIN TABS */
+.main-tabs{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:56px;z-index:90}
+.tabs-row{display:flex;gap:0}
+.mtab{padding:14px 18px;font-size:13px;font-weight:600;color:var(--ink3);cursor:pointer;border-bottom:2.5px solid transparent;transition:.2s;white-space:nowrap}
+.mtab.active{color:var(--ink);border-color:var(--c1)}
+
+/* SECTIONS */
+.sec{padding:24px}
+.pane{display:none}
+.pane.active{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTION LABEL */
+.sec-head{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.sec-head::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* LEADERBOARD */
+.lb-hero{background:var(--c1);border-radius:20px;padding:24px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden;transition:.3s}
+.lb-hero::before{content:'';position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.08)}
+.lb-hero::after{content:'';position:absolute;right:40px;bottom:-40px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.05)}
+.lb-eyebrow{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;opacity:.65;margin-bottom:6px}
+.lb-title{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px}
+.lb-sub{font-size:13px;opacity:.65}
+.lb-stats{display:flex;gap:24px;margin-top:18px}
+.lb-stat-num{font-size:24px;font-weight:800;letter-spacing:-0.5px}
+.lb-stat-lbl{font-size:10px;opacity:.55;margin-top:1px}
+
+/* LEADERBOARD TABLE */
+.lb-table{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.lb-row{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:.2s}
+.lb-row:hover{border-color:var(--c1);transform:translateX(2px)}
+.lb-row.active-uni{border:2px solid var(--c1);background:var(--c1-dim)}
+.lb-rank{font-size:18px;font-weight:800;letter-spacing:-0.5px;width:28px;text-align:center;flex-shrink:0}
+.lb-rank.gold{color:#f59e0b}
+.lb-rank.silver{color:#9ca3af}
+.lb-rank.bronze{color:#cd7c3a}
+.lb-uni-logo{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;letter-spacing:-0.5px}
+.lb-info{flex:1;min-width:0}
+.lb-uni-name{font-size:14px;font-weight:700}
+.lb-uni-detail{font-size:11px;color:var(--ink3);margin-top:1px}
+.lb-score-wrap{text-align:right;flex-shrink:0}
+.lb-score{font-size:18px;font-weight:800;letter-spacing:-0.5px}
+.lb-score-lbl{font-size:10px;color:var(--ink3)}
+.lb-delta{font-size:11px;font-weight:600;padding:2px 8px;border-radius:8px;margin-top:3px;display:inline-block}
+.delta-up{background:#e6faf4;color:#00a87d}
+.delta-dn{background:#fdeee9;color:#c0392b}
+
+/* WASTE BARS */
+.waste-bar-section{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:20px}
+.wb-title{font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.wb-sub{font-size:11px;color:var(--ink3);font-weight:400}
+.wb-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.wb-name{font-size:12px;font-weight:600;width:88px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wb-track{flex:1;height:10px;background:var(--surface2);border-radius:5px;overflow:hidden}
+.wb-fill{height:100%;border-radius:5px;transition:width 1s ease}
+.wb-pct{font-size:11px;font-weight:700;width:32px;text-align:right;flex-shrink:0}
+
+/* TWO-COL GRID */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:600px){.two-col{grid-template-columns:1fr}}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px}
+.stat-card-val{font-size:26px;font-weight:800;letter-spacing:-0.5px;margin-bottom:2px}
+.stat-card-lbl{font-size:11px;color:var(--ink3)}
+.stat-card-delta{font-size:11px;font-weight:600;margin-top:6px}
+
+/* STUDENT PANE */
+.phone-layout{display:grid;grid-template-columns:280px 1fr;gap:20px}
+@media(max-width:680px){.phone-layout{grid-template-columns:1fr}}
+.phone-wrap{background:var(--surface);border:1px solid var(--border);border-radius:26px;overflow:hidden}
+.ph-bar{height:30px;background:var(--surface2);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.ph-time{font-size:11px;font-weight:700}
+.ph-notch{width:52px;height:16px;background:var(--surface);border-radius:0 0 8px 8px}
+.ph-body{padding:16px}
+.ph-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.ph-name{font-size:16px;font-weight:800;letter-spacing:-0.3px}
+.ph-sub{font-size:11px;color:var(--ink3)}
+.av{width:34px;height:34px;border-radius:50%;background:var(--c1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;transition:.3s}
+
+/* SCORE CARD PHONE */
+.score-card{background:var(--ink);border-radius:16px;padding:16px;margin-bottom:12px;color:#fff;position:relative;overflow:hidden}
+.score-card::after{content:'';position:absolute;right:-15px;top:-15px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.04)}
+.sc-label{font-size:10px;opacity:.45;font-weight:500;margin-bottom:3px}
+.sc-num{font-size:36px;font-weight:800;color:var(--c1);letter-spacing:-1px;line-height:1;transition:.3s}
+.sc-ctx{font-size:10px;opacity:.4;margin-top:3px}
+.sc-bar{margin-top:12px;height:5px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+.sc-fill{height:100%;border-radius:3px;background:var(--c1);width:30%;transition:.3s}
+
+/* WEEK BARS */
+.wk{background:var(--surface2);border-radius:12px;padding:12px;margin-bottom:12px}
+.wk-top{display:flex;justify-content:space-between;margin-bottom:10px}
+.wk-t{font-size:11px;font-weight:700}
+.wk-a{font-size:10px;color:var(--ink3)}
+.bars{display:flex;align-items:flex-end;gap:4px;height:44px}
+.b{flex:1;border-radius:4px 4px 0 0;min-height:3px}
+
+/* STREAK */
+.streak{border:1.5px solid var(--c1);background:var(--c1-dim);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:12px;transition:.3s}
+.streak-ic{width:28px;height:28px;border-radius:7px;background:var(--c1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:.3s}
+.streak-t{font-size:11px;font-weight:700;color:var(--c1-text);transition:.3s}
+.streak-s{font-size:10px;color:var(--ink3)}
+
+/* FOOD ITEMS */
+.fi{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border)}
+.fi:last-child{border:none}
+.fi-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.fi-name{font-size:12px;font-weight:500;flex:1}
+.fi-pill{font-size:10px;font-weight:600;padding:3px 9px;border-radius:8px}
+
+/* RIGHT CARDS */
+.rcard{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:14px}
+.rcard-head{font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.rcard-ic{width:26px;height:26px;border-radius:7px;background:var(--c1-dim);display:flex;align-items:center;justify-content:center;transition:.3s}
+.rcard-ic svg{width:13px;height:13px;stroke:var(--c1);fill:none;stroke-width:2;transition:.3s}
+.step{display:flex;gap:11px;margin-bottom:12px;align-items:flex-start}
+.sn{width:22px;height:22px;border-radius:7px;background:var(--c1);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:.3s}
+.sn.ghost{background:var(--c1-dim);color:var(--c1-text)}
+.sb{font-size:13px;color:var(--ink2);line-height:1.5}
+.sb strong{color:var(--ink);font-weight:600}
+.mr{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.mr:last-child{border:none}
+.ml{font-size:12px;color:var(--ink3)}
+.mv{font-size:14px;font-weight:700}
+.mv.t{color:var(--c1);transition:.3s}
+
+/* CHALLENGE CARDS */
+.challenge-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.ch-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;transition:.2s;cursor:pointer}
+.ch-card:hover{border-color:var(--c1);transform:translateY(-2px)}
+.ch-icon{font-size:28px;margin-bottom:10px}
+.ch-title{font-size:14px;font-weight:700;margin-bottom:5px}
+.ch-desc{font-size:12px;color:var(--ink3);line-height:1.5}
+.ch-pts{font-size:18px;font-weight:800;color:var(--c1);margin-top:10px;letter-spacing:-0.3px;transition:.3s}
+
+/* UIUC ACCENT OVERRIDE */
+body.uiuc .score-card{background:var(--c1)}
+body.uiuc .sc-num{color:var(--uni-accent)}
+body.uiuc .sc-fill{background:var(--uni-accent)}
+body.uiuc .av,.body.uiuc .streak-ic,.body.uiuc .sn:not(.ghost),.body.uiuc .logo-mark{background:var(--uni-accent)}
+body.uiuc .streak,.body.uiuc .streak-t{border-color:var(--uni-accent);color:var(--uni-accent)}
+body.uiuc .streak{background:var(--uni-accent-dim)}
+body.uiuc .mv.t,.body.uiuc .ch-pts{color:var(--uni-accent)}
+body.uiuc .mtab.active{border-color:var(--uni-accent)}
+body.uiuc .lb-hero{background:var(--c1)}
+
+</style>
+</head>
+<body class="default" id="appbody">
+
+<!-- SKIN SWITCHER -->
+<div class="skin-bar">
+  <span class="skin-bar-label">Switch campus</span>
+  <button class="skin-btn s-wastewise active" onclick="setSkin('default','wastewise')">WasteWise</button>
+  <button class="skin-btn s-isu" onclick="setSkin('isu','isu')">🔴 ISU Redbirds</button>
+  <button class="skin-btn s-uiuc" onclick="setSkin('uiuc','uiuc')">🟠 UIUC Illini</button>
+  <button class="skin-btn s-northwestern" onclick="setSkin('northwestern','northwestern')">🟣 Northwestern</button>
+  <button class="skin-btn s-uchicago" onclick="setSkin('uchicago','uchicago')">🟤 UChicago</button>
+  <button class="skin-btn s-depaul" onclick="setSkin('depaul','depaul')">🔵 DePaul</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo-wrap">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+    </div>
+    <div class="logo-text">Waste<span class="accent">Wise</span></div>
+    <span class="uni-badge" id="uni-badge">ISU</span>
+  </div>
+  <div class="nav-right">
+    <button class="nav-cta" id="nav-cta">Get started</button>
+  </div>
+</nav>
+
+<!-- TABS -->
+<div class="main-tabs">
+  <div class="tabs-row">
+    <div class="mtab active" onclick="switchTab('leaderboard',this)">🏆 University challenge</div>
+    <div class="mtab" onclick="switchTab('student',this)">My tracker</div>
+    <div class="mtab" onclick="switchTab('challenges',this)">Campus challenges</div>
+  </div>
+</div>
+
+<!-- LEADERBOARD PANE -->
+<div class="pane active sec" id="pane-leaderboard">
+
+  <div class="lb-hero" id="lb-hero">
+    <div class="lb-eyebrow">Spring 2025 semester</div>
+    <div class="lb-title">Illinois University<br>Waste Reduction Championship</div>
+    <div class="lb-sub">5 universities · 18,400 students · competing now</div>
+    <div class="lb-stats">
+      <div><div class="lb-stat-num">847K</div><div class="lb-stat-lbl">lbs food saved total</div></div>
+      <div><div class="lb-stat-num">$2.1M</div><div class="lb-stat-lbl">costs avoided</div></div>
+      <div><div class="lb-stat-num">12 wks</div><div class="lb-stat-lbl">remaining</div></div>
+    </div>
+  </div>
+
+  <div class="sec-head">Live standings</div>
+  <div class="lb-table" id="lb-table">
+
+    <div class="lb-row" onclick="setSkin('uiuc','uiuc');setSkinBtn('uiuc')">
+      <div class="lb-rank gold">1</div>
+      <div class="lb-uni-logo" style="background:#e84a27">UI</div>
+      <div class="lb-info">
+        <div class="lb-uni-name">UIUC Illini</div>
+        <div class="lb-uni-detail">Urbana-Champaign · 8,200 students enrolled</div>
+      </div>
+      <div class="lb-score-wrap">
+        <div class="lb-score" style="color:#e84a27">94.2</div>
+        <div class="lb-score-lbl">WasteScore</div>
+        <div class="lb-delta delta-up">↑ 2.1 this week</div>
+      </div>
+    </div>
+
+    <div class="lb-row active-uni" id="lb-isu" onclick="setSkin('isu','isu');setSkinBtn('isu')">
+      <div class="lb-rank silver">2</div>
+      <div class="lb-uni-logo" style="background:#cc0000">IS</div>
+      <div class="lb-info">
+        <div class="lb-uni-name">ISU Redbirds <span style="font-size:10px;background:#fff3;color:#fff;padding:2px 6px;border-radius:6px;margin-left:4px;font-weight:600">YOU</span></div>
+        <div class="lb-uni-detail">Normal, IL · 5,800 students enrolled</div>
+      </div>
+      <div class="lb-score-wrap">
+        <div class="lb-score" style="color:#cc0000">91.7</div>
+        <div class="lb-score-lbl">WasteScore</div>
+        <div class="lb-delta delta-up">↑ 3.4 this week</div>
+      </div>
+    </div>
+
+    <div class="lb-row" onclick="setSkin('northwestern','northwestern');setSkinBtn('northwestern')">
+      <div class="lb-rank bronze">3</div>
+      <div class="lb-uni-logo" style="background:#4e2a84">NW</div>
+      <div class="lb-info">
+        <div class="lb-uni-name">Northwestern Wildcats</div>
+        <div class="lb-uni-detail">Evanston, IL · 2,100 students enrolled</div>
+      </div>
+      <div class="lb-score-wrap">
+        <div class="lb-score" style="color:#4e2a84">88.3</div>
+        <div class="lb-score-lbl">WasteScore</div>
+        <div class="lb-delta delta-dn">↓ 0.8 this week</div>
+      </div>
+    </div>
+
+    <div class="lb-row" onclick="setSkin('uchicago','uchicago');setSkinBtn('uchicago')">
+      <div class="lb-rank" style="color:var(--ink3)">4</div>
+      <div class="lb-uni-logo" style="background:#800000">UC</div>
+      <div class="lb-info">
+        <div class="lb-uni-name">UChicago Maroons</div>
+        <div class="lb-uni-detail">Chicago, IL · 1,900 students enrolled</div>
+      </div>
+      <div class="lb-score-wrap">
+        <div class="lb-score" style="color:#800000">85.1</div>
+        <div class="lb-score-lbl">WasteScore</div>
+        <div class="lb-delta delta-up">↑ 1.2 this week</div>
+      </div>
+    </div>
+
+    <div class="lb-row" onclick="setSkin('depaul','depaul');setSkinBtn('depaul')">
+      <div class="lb-rank" style="color:var(--ink3)">5</div>
+      <div class="lb-uni-logo" style="background:#005587">DP</div>
+      <div class="lb-info">
+        <div class="lb-uni-name">DePaul Blue Demons</div>
+        <div class="lb-uni-detail">Chicago, IL · 2,400 students enrolled</div>
+      </div>
+      <div class="lb-score-wrap">
+        <div class="lb-score" style="color:#005587">79.6</div>
+        <div class="lb-score-lbl">WasteScore</div>
+        <div class="lb-delta delta-dn">↓ 2.3 this week</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sec-head">Waste rate by university</div>
+  <div class="waste-bar-section">
+    <div class="wb-title">Current waste rate <span class="wb-sub">lower = better</span></div>
+    <div class="wb-row"><div class="wb-name">UIUC</div><div class="wb-track"><div class="wb-fill" style="width:28%;background:#e84a27"></div></div><div class="wb-pct" style="color:#e84a27">28%</div></div>
+    <div class="wb-row"><div class="wb-name">ISU</div><div class="wb-track"><div class="wb-fill" style="width:31%;background:#cc0000"></div></div><div class="wb-pct" style="color:#cc0000">31%</div></div>
+    <div class="wb-row"><div class="wb-name">Northwestern</div><div class="wb-track"><div class="wb-fill" style="width:35%;background:#4e2a84"></div></div><div class="wb-pct" style="color:#4e2a84">35%</div></div>
+    <div class="wb-row"><div class="wb-name">UChicago</div><div class="wb-track"><div class="wb-fill" style="width:38%;background:#800000"></div></div><div class="wb-pct" style="color:#800000">38%</div></div>
+    <div class="wb-row"><div class="wb-name">DePaul</div><div class="wb-track"><div class="wb-fill" style="width:44%;background:#005587"></div></div><div class="wb-pct" style="color:#005587">44%</div></div>
+    <div class="wb-row" style="margin-bottom:0"><div class="wb-name" style="color:var(--ink3)">US avg</div><div class="wb-track"><div class="wb-fill" style="width:53%;background:var(--ink3)"></div></div><div class="wb-pct" style="color:var(--ink3)">53%</div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="stat-card">
+      <div class="stat-card-val" style="color:#e84a27">UIUC</div>
+      <div class="stat-card-lbl">Current leader</div>
+      <div class="stat-card-delta" style="color:#e84a27">94.2 WasteScore</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val" id="gap-val">2.5 pts</div>
+      <div class="stat-card-lbl" id="gap-lbl">ISU gap to 1st place</div>
+      <div class="stat-card-delta" style="color:#00a87d">Closeable in 3 weeks</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- STUDENT PANE -->
+<div class="pane sec" id="pane-student">
+  <div class="phone-layout">
+    <div class="phone-wrap">
+      <div class="ph-bar">
+        <span class="ph-time">9:41 AM</span>
+        <div class="ph-notch"></div>
+        <span class="ph-time" style="font-size:9px">●●●</span>
+      </div>
+      <div class="ph-body">
+        <div class="ph-header">
+          <div>
+            <div class="ph-sub" id="ph-uni-label">WasteWise</div>
+            <div class="ph-name">Alex S. 👋</div>
+          </div>
+          <div class="av">AS</div>
+        </div>
+        <div class="score-card">
+          <div class="sc-label">Your waste rate this week</div>
+          <div class="sc-num">30%</div>
+          <div class="sc-ctx">Campus average: 41% · You're doing great</div>
+          <div class="sc-bar"><div class="sc-fill"></div></div>
+        </div>
+        <div class="wk">
+          <div class="wk-top"><div class="wk-t">7-day history</div><div class="wk-a">avg 34%</div></div>
+          <div class="bars" id="week-bars">
+            <div class="b" style="height:55%"></div>
+            <div class="b" style="height:75%"></div>
+            <div class="b" style="height:40%"></div>
+            <div class="b" style="height:88%"></div>
+            <div class="b" style="height:62%"></div>
+            <div class="b" style="height:35%"></div>
+            <div class="b" style="height:48%"></div>
+          </div>
+        </div>
+        <div class="streak">
+          <div class="streak-ic">🔥</div>
+          <div>
+            <div class="streak-t">5-day clean plate streak!</div>
+            <div class="streak-s" id="points-label">+50 WisePoints → $5 dining credit</div>
+          </div>
+        </div>
+        <div class="fi"><div class="fi-dot" style="background:#00c896"></div><div class="fi-name">Today's lunch</div><div class="fi-pill" style="background:#e6faf4;color:#007a5a">Finished ✓</div></div>
+        <div class="fi"><div class="fi-dot" style="background:#ff8c42"></div><div class="fi-name">Yesterday dinner</div><div class="fi-pill" style="background:#fff3ec;color:#ff8c42">~20% left</div></div>
+        <div class="fi" style="border:none"><div class="fi-dot" style="background:#ff4d4d"></div><div class="fi-name">Mon breakfast</div><div class="fi-pill" style="background:#fff0f0;color:#ff4d4d">Half wasted</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="rcard">
+        <div class="rcard-head"><div class="rcard-ic"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77l-6.18 3.23L7 14.14 2 9.27l6.91-1.01z"/></svg></div>How it works</div>
+        <div class="step"><div class="sn">1</div><div class="sb"><strong>Swipe in</strong> — dining session begins. AI tracks portion via tray-weight sensors or a quick plate photo.</div></div>
+        <div class="step"><div class="sn">2</div><div class="sb"><strong>Exit check</strong> — tray weighed on departure. Waste delta calculated instantly, logged anonymously.</div></div>
+        <div class="step"><div class="sn">3</div><div class="sb"><strong>Weekly insights</strong> — "You waste most on Thursdays. Try the smaller plate first."</div></div>
+        <div class="step"><div class="sn ghost">★</div><div class="sb"><strong id="points-name">WisePoints</strong> — low-waste streaks earn dining credits, campus merch, or food vouchers. Earns points toward the university leaderboard.</div></div>
+      </div>
+      <div class="rcard">
+        <div class="rcard-head"><div class="rcard-ic"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>Your semester impact</div>
+        <div class="mr"><span class="ml">Food saved</span><span class="mv t">18.4 lbs</span></div>
+        <div class="mr"><span class="ml">CO₂ equivalent avoided</span><span class="mv t">11.2 kg</span></div>
+        <div class="mr"><span class="ml">Points earned</span><span class="mv t" id="pts-earned">340 pts</span></div>
+        <div class="mr"><span class="ml">Campus avg waste rate</span><span class="mv" style="color:#ff8c42">41%</span></div>
+        <div class="mr"><span class="ml">Your waste rate</span><span class="mv t">30%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHALLENGES PANE -->
+<div class="pane sec" id="pane-challenges">
+  <div class="sec-head">Active campus challenges</div>
+  <div class="challenge-grid">
+    <div class="ch-card">
+      <div class="ch-icon">🏅</div>
+      <div class="ch-title">Clean Plate Week</div>
+      <div class="ch-desc">Zero waste for 5 consecutive dining sessions. Highest participation wins bonus points for your university.</div>
+      <div class="ch-pts">+200 pts</div>
+    </div>
+    <div class="ch-card">
+      <div class="ch-icon">📉</div>
+      <div class="ch-title">30-Day reduction challenge</div>
+      <div class="ch-desc">Reduce your personal waste rate by 15% over 30 days. Tracked automatically.</div>
+      <div class="ch-pts">+350 pts</div>
+    </div>
+    <div class="ch-card">
+      <div class="ch-icon">🤝</div>
+      <div class="ch-title">Hall vs. Hall</div>
+      <div class="ch-desc">Your residence hall vs. every other dorm on campus. Lowest average waste rate wins the semester trophy.</div>
+      <div class="ch-pts">+500 pts</div>
+    </div>
+    <div class="ch-card">
+      <div class="ch-icon">🌍</div>
+      <div class="ch-title">Beat UIUC</div>
+      <div class="ch-desc">ISU is 2.5 points behind UIUC on the state leaderboard. Collective action this week could close the gap.</div>
+      <div class="ch-pts">+1000 pts</div>
+    </div>
+    <div class="ch-card">
+      <div class="ch-icon">🥗</div>
+      <div class="ch-title">Veggie-first Tuesdays</div>
+      <div class="ch-desc">Choose plant-based options on Tuesdays. Lower environmental footprint tracked campus-wide.</div>
+      <div class="ch-pts">+150 pts</div>
+    </div>
+    <div class="ch-card">
+      <div class="ch-icon">♻️</div>
+      <div class="ch-title">Donate your surplus</div>
+      <div class="ch-desc">Log a food pantry donation through the app. Connects to BN Food Rescue for drop-off coordination.</div>
+      <div class="ch-pts">+100 pts</div>
+    </div>
+  </div>
+
+  <div class="sec-head">Season prize pool</div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px">
+    <div class="mr"><span class="ml">🥇 1st place university</span><span class="mv t">$10,000 dining credit fund + trophy</span></div>
+    <div class="mr"><span class="ml">🥈 2nd place</span><span class="mv">$5,000 dining credits</span></div>
+    <div class="mr"><span class="ml">🥉 3rd place</span><span class="mv">$2,500 dining credits</span></div>
+    <div class="mr"><span class="ml">Top individual student</span><span class="mv t">Full semester dining plan</span></div>
+    <div class="mr" style="border:none"><span class="ml">All participants</span><span class="mv" style="font-size:12px">Impact report + certificate</span></div>
+  </div>
+</div>
+
+<script>
+const skins={
+  default:{badge:'',cta:'Get started',points:'WisePoints',ptsName:'WisePoints',ptsEarned:'340 pts',phLabel:'WasteWise',gapLbl:'Gap to 1st place'},
+  isu:{badge:'ISU Redbirds',cta:'Go Birds!',points:'+50 RedPoints → $5 dining',ptsName:'RedPoints',ptsEarned:'340 RedPoints',phLabel:'ISU Redbirds',gapLbl:'ISU gap to 1st place'},
+  uiuc:{badge:'Fighting Illini',cta:'I-L-L!',points:'+50 IlliniPoints → $5 dining',ptsName:'IlliniPoints',ptsEarned:'340 IlliniPoints',phLabel:'UIUC Illini',gapLbl:'UIUC leads by'},
+  northwestern:{badge:'Go Wildcats',cta:'Go Cats!',points:'+50 CatPoints → $5 dining',ptsName:'CatPoints',ptsEarned:'340 CatPoints',phLabel:'Northwestern',gapLbl:'Northwestern gap'},
+  uchicago:{badge:'UChicago',cta:'Maroons!',points:'+50 MaroonPts → $5 dining',ptsName:'MaroonPoints',ptsEarned:'340 MaroonPts',phLabel:'UChicago',gapLbl:'UChicago gap'},
+  depaul:{badge:'DePaul',cta:'Go Demons!',points:'+50 DemonPoints → $5 dining',ptsName:'DemonPoints',ptsEarned:'340 DemonPts',phLabel:'DePaul',gapLbl:'DePaul gap'}
+};
+
+function setSkin(skin,btnId){
+  const body=document.getElementById('appbody');
+  body.className=skin;
+  const s=skins[skin]||skins.default;
+  document.getElementById('uni-badge').textContent=s.badge;
+  document.getElementById('nav-cta').textContent=s.cta;
+  document.getElementById('points-label').textContent=s.points;
+  document.getElementById('points-name').textContent=s.ptsName;
+  document.getElementById('pts-earned').textContent=s.ptsEarned;
+  document.getElementById('ph-uni-label').textContent=s.phLabel;
+  document.getElementById('gap-lbl').textContent=s.gapLbl;
+}
+
+function setSkinBtn(id){
+  document.querySelectorAll('.skin-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.s-'+id).classList.add('active');
+}
+
+function switchTab(id,el){
+  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pane-'+id).classList.add('active');
+}
+
+// Color week bars by threshold
+document.querySelectorAll('#week-bars .b').forEach(b=>{
+  const h=parseFloat(b.style.height);
+  b.style.background=h>80?'#ff4d4d':h>60?'#ff8c42':'#00c896';
+  b.style.borderRadius='4px 4px 0 0';
+});
+</script>
+</body>
+</html>

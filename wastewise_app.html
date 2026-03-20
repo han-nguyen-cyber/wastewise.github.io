@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f7f4;
+  --surface:#ffffff;
+  --surface2:#f2f1ee;
+  --ink:#0f0f0f;
+  --ink2:#6b6b6b;
+  --ink3:#a8a8a8;
+  --teal:#00c896;
+  --teal-dim:#e6faf4;
+  --teal-mid:#00a87d;
+  --amber:#ff8c42;
+  --amber-dim:#fff3ec;
+  --red:#ff4d4d;
+  --red-dim:#fff0f0;
+  --blue:#4f8aff;
+  --blue-dim:#eef3ff;
+  --border:#e8e6e1;
+  --shadow:0 2px 12px rgba(0,0,0,.06);
+}
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh}
+
+/* NAV */
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-mark{width:30px;height:30px;background:var(--teal);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.logo-mark svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2.2}
+.logo-text{font-weight:800;font-size:16px;letter-spacing:-0.4px}
+.logo-text span{color:var(--teal)}
+.nav-right{display:flex;align-items:center;gap:8px}
+.badge-tag{font-size:11px;font-weight:600;padding:5px 12px;background:var(--teal-dim);color:var(--teal-mid);border-radius:20px}
+.nav-btn{font-size:12px;font-weight:600;padding:7px 16px;background:var(--ink);color:#fff;border-radius:20px;cursor:pointer;border:none;font-family:inherit}
+
+/* HERO */
+.hero{padding:56px 28px 48px;max-width:900px}
+.hero-chip{display:inline-flex;align-items:center;gap:6px;background:var(--teal-dim);color:var(--teal-mid);font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:20px;letter-spacing:.3px}
+.hero-chip-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+h1{font-size:clamp(32px,5vw,56px);font-weight:800;line-height:1.05;letter-spacing:-1.5px;margin-bottom:16px}
+h1 em{color:var(--teal);font-style:normal}
+.hero-desc{font-size:15px;color:var(--ink2);line-height:1.65;max-width:520px;margin-bottom:32px}
+.stat-row{display:flex;gap:0;flex-wrap:wrap;border:1px solid var(--border);border-radius:14px;background:var(--surface);overflow:hidden;max-width:600px}
+.stat-cell{flex:1;min-width:120px;padding:16px 20px;border-right:1px solid var(--border)}
+.stat-cell:last-child{border:none}
+.stat-num{font-size:22px;font-weight:800;letter-spacing:-0.5px}
+.stat-num.t{color:var(--teal)}
+.stat-num.a{color:var(--amber)}
+.stat-num.r{color:var(--red)}
+.stat-sub{font-size:11px;color:var(--ink3);margin-top:2px}
+
+/* TABS */
+.tabs-wrap{padding:0 28px;margin-bottom:0;position:sticky;top:56px;background:var(--bg);z-index:90;border-bottom:1px solid var(--border)}
+.tabs{display:flex;gap:0}
+.tab{padding:14px 20px;font-size:13px;font-weight:600;color:var(--ink3);cursor:pointer;border-bottom:2px solid transparent;transition:.2s;white-space:nowrap}
+.tab.active{color:var(--ink);border-color:var(--teal)}
+.tab:hover:not(.active){color:var(--ink2)}
+
+/* CONTENT */
+.content{padding:28px}
+.pane{display:none}
+.pane.active{display:grid;grid-template-columns:300px 1fr;gap:20px;animation:fadeIn .3s ease}
+@media(max-width:680px){.pane.active{grid-template-columns:1fr}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* PHONE */
+.phone-wrap{background:var(--surface);border:1px solid var(--border);border-radius:28px;overflow:hidden;box-shadow:var(--shadow)}
+.ph-bar{height:32px;background:var(--surface2);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.ph-time{font-size:11px;font-weight:700}
+.ph-notch{width:56px;height:18px;background:var(--surface);border-radius:0 0 10px 10px}
+.ph-body{padding:18px}
+
+/* PHONE COMPONENTS */
+.ph-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.ph-greeting{font-size:11px;color:var(--ink3);font-weight:500}
+.ph-name{font-size:17px;font-weight:800;letter-spacing:-0.3px}
+.av{width:34px;height:34px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+
+/* SCORE CARD */
+.score-card{background:var(--ink);border-radius:18px;padding:18px;margin-bottom:14px;color:#fff;position:relative;overflow:hidden}
+.score-card::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(0,200,150,.12)}
+.score-label{font-size:11px;color:rgba(255,255,255,.5);font-weight:500;margin-bottom:4px}
+.score-num{font-size:40px;font-weight:800;color:var(--teal);letter-spacing:-1px;line-height:1}
+.score-context{font-size:11px;color:rgba(255,255,255,.5);margin-top:4px}
+.score-bar-wrap{margin-top:14px;background:rgba(255,255,255,.1);border-radius:6px;height:6px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:6px;background:var(--teal);width:30%}
+
+/* WEEK CHART */
+.wk-chart{background:var(--surface2);border-radius:14px;padding:14px;margin-bottom:14px}
+.wk-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.wk-title{font-size:12px;font-weight:700}
+.wk-avg{font-size:11px;color:var(--ink3)}
+.bars-row{display:flex;align-items:flex-end;gap:5px;height:54px}
+.bbar{flex:1;border-radius:4px 4px 0 0;min-height:4px;position:relative}
+.bbar::after{content:attr(data-d);position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--ink3);font-weight:600}
+.bars-labels{height:16px}
+
+/* STREAK */
+.streak{border:1.5px solid var(--teal);background:var(--teal-dim);border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.streak-ic{width:30px;height:30px;border-radius:8px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.streak-t{font-size:12px;font-weight:700;color:var(--teal-mid)}
+.streak-s{font-size:11px;color:var(--ink3)}
+
+/* FOOD ITEMS */
+.food-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.food-item:last-child{border:none}
+.food-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.food-name{font-size:12px;font-weight:500;flex:1}
+.food-pill{font-size:10px;font-weight:600;padding:3px 9px;border-radius:8px}
+
+/* RIGHT SIDE CARDS */
+.rcard{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.rcard-head{font-size:13px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.rcard-head-icon{width:28px;height:28px;border-radius:8px;background:var(--teal-dim);display:flex;align-items:center;justify-content:center}
+.rcard-head-icon svg{width:14px;height:14px;stroke:var(--teal-mid);fill:none;stroke-width:2}
+
+.step{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.step-num{width:22px;height:22px;border-radius:7px;background:var(--teal);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-num.ghost{background:var(--teal-dim);color:var(--teal-mid)}
+.step-body{font-size:13px;color:var(--ink2);line-height:1.55}
+.step-body strong{color:var(--ink);font-weight:600}
+
+.metric-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.metric-row:last-child{border:none}
+.metric-lbl{font-size:12px;color:var(--ink3)}
+.metric-val{font-size:15px;font-weight:700}
+.metric-val.t{color:var(--teal)}
+.metric-val.a{color:var(--amber)}
+.metric-val.r{color:var(--red)}
+
+/* UNIVERSITY */
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.mini-card{background:var(--surface2);border-radius:12px;padding:12px}
+.mini-val{font-size:18px;font-weight:800;letter-spacing:-0.3px}
+.mini-lbl{font-size:10px;color:var(--ink3);margin-top:1px}
+
+.forecast-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.fc-day{font-size:11px;font-weight:600;width:26px;color:var(--ink3)}
+.fc-track{flex:1;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.fc-fill{height:100%;border-radius:4px}
+.fc-num{font-size:11px;font-weight:600;width:32px;text-align:right}
+
+.alert-card{background:var(--amber-dim);border:1px solid rgba(255,140,66,.2);border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:center;margin-top:10px}
+.alert-ic{font-size:18px;flex-shrink:0}
+.alert-t{font-size:12px;font-weight:700;color:var(--amber)}
+.alert-s{font-size:11px;color:var(--ink3)}
+
+/* SCANNER */
+.scan-hero{background:var(--ink);border-radius:18px;padding:18px;margin-bottom:14px;text-align:center;color:#fff}
+.scan-frame{width:80px;height:80px;border-radius:16px;border:2px dashed rgba(255,255,255,.2);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.scan-label{font-size:12px;color:rgba(255,255,255,.5)}
+.scan-label strong{color:#fff;display:block;font-size:14px;margin-bottom:2px}
+
+.scan-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.scan-thumb{width:42px;height:42px;border-radius:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.scan-name{font-size:13px;font-weight:600}
+.scan-meta{font-size:11px;color:var(--ink3);margin-top:1px}
+
+.recipe-card{background:var(--blue-dim);border:1px solid rgba(79,138,255,.15);border-radius:14px;padding:13px 14px;display:flex;align-items:center;gap:12px;margin-top:4px}
+.recipe-ic{width:36px;height:36px;border-radius:10px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.recipe-t{font-size:12px;font-weight:700;color:var(--blue)}
+.recipe-s{font-size:11px;color:var(--ink3)}
+
+/* PROBLEM SECTION */
+.prob-section{padding:0 28px 28px}
+.prob-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.prob-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow)}
+.prob-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.prob-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.prob-ic svg{width:18px;height:18px;stroke-width:1.8;fill:none}
+.prob-n{font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:1px}
+.prob-card h3{font-size:14px;font-weight:700;margin-bottom:6px}
+.prob-card p{font-size:12px;color:var(--ink3);line-height:1.55}
+.prob-stat{margin-top:12px;font-size:20px;font-weight:800;letter-spacing:-0.4px}
+
+/* SCALE SECTION */
+.scale-wrap{padding:0 28px 28px}
+.scale-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.scale-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+.scale-icon{font-size:24px;margin-bottom:10px}
+.scale-card h4{font-size:13px;font-weight:700;margin-bottom:5px}
+.scale-card p{font-size:12px;color:var(--ink3);line-height:1.5}
+.scale-num{font-size:18px;font-weight:800;color:var(--teal);margin-top:10px;letter-spacing:-0.3px}
+
+/* CTA */
+.cta-wrap{padding:0 28px 40px}
+.cta-card{background:var(--ink);border-radius:24px;padding:40px;text-align:center;position:relative;overflow:hidden}
+.cta-card::before{content:'';position:absolute;left:-60px;top:-60px;width:200px;height:200px;border-radius:50%;background:rgba(0,200,150,.08)}
+.cta-card::after{content:'';position:absolute;right:-40px;bottom:-40px;width:160px;height:160px;border-radius:50%;background:rgba(0,200,150,.06)}
+.cta-card h2{font-size:26px;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-bottom:8px}
+.cta-card p{font-size:14px;color:rgba(255,255,255,.45);margin-bottom:24px}
+.cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.cta-primary{background:var(--teal);color:#fff;font-family:inherit;font-size:13px;font-weight:700;padding:12px 24px;border-radius:24px;border:none;cursor:pointer;transition:.2s}
+.cta-primary:hover{background:var(--teal-mid)}
+.cta-ghost{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);font-family:inherit;font-size:13px;font-weight:600;padding:12px 24px;border-radius:24px;border:1px solid rgba(255,255,255,.12);cursor:pointer}
+
+/* SECTION TITLE */
+.sec-title{padding:28px 28px 16px;display:flex;align-items:center;gap:12px}
+.sec-title h2{font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3)}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo-wrap">
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+    </div>
+    <div class="logo-text">Waste<span>Wise</span></div>
+  </div>
+  <div class="nav-right">
+    <div class="badge-tag">ISU Food Waste Hackathon</div>
+    <button class="nav-btn">View pitch →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div style="padding:0 28px">
+  <div class="hero">
+    <div class="hero-chip"><div class="hero-chip-dot"></div>AI-powered campus food waste reduction</div>
+    <h1>Smarter plates.<br><em>Less waste.</em><br>Real impact.</h1>
+    <p class="hero-desc">WasteWise uses AI to track dining consumption patterns, nudge better student choices, and give universities the data they need to order smarter — reducing waste before it ever happens.</p>
+    <div class="stat-row">
+      <div class="stat-cell"><div class="stat-num r">22M</div><div class="stat-sub">lbs wasted on US campuses/yr</div></div>
+      <div class="stat-cell"><div class="stat-num a">12K</div><div class="stat-sub">lbs composted weekly at ISU</div></div>
+      <div class="stat-cell"><div class="stat-num t">25×</div><div class="stat-sub">more harmful methane vs CO₂</div></div>
+      <div class="stat-cell" style="border:none"><div class="stat-num">53%</div><div class="stat-sub">of served food can be wasted</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<div class="sec-title"><h2>The problem</h2></div>
+<div class="prob-section">
+  <div class="prob-grid">
+    <div class="prob-card">
+      <div class="prob-card-top">
+        <div class="prob-ic" style="background:#fff0f0"><svg viewBox="0 0 24 24" stroke="var(--red)"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></div>
+        <div class="prob-n">01</div>
+      </div>
+      <h3>Student over-serving</h3>
+      <p>All-you-can-eat dining creates no feedback loop. Students take more than they eat with zero accountability.</p>
+      <div class="prob-stat" style="color:var(--red)">142 lbs/yr</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-card-top">
+        <div class="prob-ic" style="background:#fff3ec"><svg viewBox="0 0 24 24" stroke="var(--amber)"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div class="prob-n">02</div>
+      </div>
+      <h3>Blind ordering</h3>
+      <p>Dining ops plan 3–5 days ahead without real consumption data, creating chronic overproduction.</p>
+      <div class="prob-stat" style="color:var(--amber)">20% of IL landfill</div>
+    </div>
+    <div class="prob-card">
+      <div class="prob-card-top">
+        <div class="prob-ic" style="background:var(--teal-dim)"><svg viewBox="0 0 24 24" stroke="var(--teal-mid)"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+        <div class="prob-n">03</div>
+      </div>
+      <h3>No incentives</h3>
+      <p>Without real-time feedback or rewards, waste is invisible. Students have no reason to change behavior.</p>
+      <div class="prob-stat" style="color:var(--teal)">0 nudges today</div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="sec-title"><h2>The app</h2></div>
+<div class="tabs-wrap">
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('student',this)">Student tracker</div>
+    <div class="tab" onclick="switchTab('university',this)">University dashboard</div>
+    <div class="tab" onclick="switchTab('offcampus',this)">Off-campus scanner</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- STUDENT -->
+  <div class="pane active" id="pane-student">
+    <div class="phone-wrap">
+      <div class="ph-bar">
+        <span class="ph-time">9:41 AM</span>
+        <div class="ph-notch"></div>
+        <span class="ph-time">●●●</span>
+      </div>
+      <div class="ph-body">
+        <div class="ph-header">
+          <div>
+            <div class="ph-greeting">Good morning</div>
+            <div class="ph-name">Alex S. 👋</div>
+          </div>
+          <div class="av">AS</div>
+        </div>
+
+        <div class="score-card">
+          <div class="score-label">Your waste rate this week</div>
+          <div class="score-num">30%</div>
+          <div class="score-context">Campus average: 41% · You're doing great</div>
+          <div class="score-bar-wrap"><div class="score-bar-fill"></div></div>
+        </div>
+
+        <div class="wk-chart">
+          <div class="wk-top">
+            <div class="wk-title">7-day history</div>
+            <div class="wk-avg">avg 34%</div>
+          </div>
+          <div class="bars-row">
+            <div class="bbar" data-d="M" style="height:55%;background:#00c896;border-radius:5px 5px 0 0"></div>
+            <div class="bbar" data-d="T" style="height:75%;background:#ff8c42;border-radius:5px 5px 0 0"></div>
+            <div class="bbar" data-d="W" style="height:40%;background:#00c896;border-radius:5px 5px 0 0"></div>
+            <div class="bbar" data-d="T" style="height:88%;background:#ff4d4d;border-radius:5px 5px 0 0"></div>
+            <div class="bbar" data-d="F" style="height:62%;background:#ff8c42;border-radius:5px 5px 0 0"></div>
+            <div class="bbar" data-d="S" style="height:35%;background:#00c896;border-radius:5px 5px 0 0"></div>
+            <div class="bbar" data-d="S" style="height:48%;background:#00c896;border-radius:5px 5px 0 0"></div>
+          </div>
+          <div class="bars-labels"></div>
+        </div>
+
+        <div class="streak">
+          <div class="streak-ic">🔥</div>
+          <div>
+            <div class="streak-t">5-day clean plate streak!</div>
+            <div class="streak-s">+50 WisePoints earned → $5 dining credit</div>
+          </div>
+        </div>
+
+        <div class="food-item">
+          <div class="food-dot" style="background:var(--teal)"></div>
+          <div class="food-name">Today's lunch</div>
+          <div class="food-pill" style="background:var(--teal-dim);color:var(--teal-mid)">Finished ✓</div>
+        </div>
+        <div class="food-item">
+          <div class="food-dot" style="background:var(--amber)"></div>
+          <div class="food-name">Yesterday dinner</div>
+          <div class="food-pill" style="background:var(--amber-dim);color:var(--amber)">~20% left</div>
+        </div>
+        <div class="food-item" style="border:none">
+          <div class="food-dot" style="background:var(--red)"></div>
+          <div class="food-name">Mon breakfast</div>
+          <div class="food-pill" style="background:var(--red-dim);color:var(--red)">Half wasted</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="rcard">
+        <div class="rcard-head">
+          <div class="rcard-head-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77l-6.18 3.23L7 14.14 2 9.27l6.91-1.01z"/></svg></div>
+          How the student app works
+        </div>
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Swipe in</strong> — dining session begins. AI tracks portion via optional tray-weight sensors or a quick photo of your plate.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Exit check</strong> — tray weighed on departure. Waste delta calculated instantly and logged anonymously.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Weekly insights</strong> — "You waste most on Thursdays. Try the smaller plate first." Personalized, never preachy.</div></div>
+        <div class="step"><div class="step-num ghost">★</div><div class="step-body"><strong>WisePoints rewards</strong> — low-waste streaks earn dining credits, ISU merch, or Green Top Grocery vouchers.</div></div>
+      </div>
+      <div class="rcard">
+        <div class="rcard-head">
+          <div class="rcard-head-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          Your semester impact
+        </div>
+        <div class="metric-row"><span class="metric-lbl">Food saved</span><span class="metric-val t">18.4 lbs</span></div>
+        <div class="metric-row"><span class="metric-lbl">CO₂ equivalent avoided</span><span class="metric-val t">11.2 kg</span></div>
+        <div class="metric-row"><span class="metric-lbl">WisePoints earned</span><span class="metric-val t">340 pts</span></div>
+        <div class="metric-row"><span class="metric-lbl">Campus avg waste rate</span><span class="metric-val a">41%</span></div>
+        <div class="metric-row"><span class="metric-lbl">Your waste rate</span><span class="metric-val t">30%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY -->
+  <div class="pane" id="pane-university">
+    <div class="phone-wrap">
+      <div class="ph-bar">
+        <span class="ph-time">8:15 AM</span>
+        <div class="ph-notch"></div>
+        <span class="ph-time">●●●</span>
+      </div>
+      <div class="ph-body">
+        <div class="ph-header">
+          <div>
+            <div class="ph-greeting">ISU Dining Operations</div>
+            <div class="ph-name">Today's overview</div>
+          </div>
+          <div class="av" style="background:var(--blue);border-radius:10px;font-size:11px">ISU</div>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini-card"><div class="mini-val">847</div><div class="mini-lbl">Covers today</div></div>
+          <div class="mini-card"><div class="mini-val" style="color:var(--amber)">38%</div><div class="mini-lbl">Waste rate</div></div>
+          <div class="mini-card"><div class="mini-val" style="color:var(--teal)">$1,240</div><div class="mini-lbl">Saved this week</div></div>
+          <div class="mini-card"><div class="mini-val">92%</div><div class="mini-lbl">Forecast accuracy</div></div>
+        </div>
+
+        <div style="font-size:11px;font-weight:700;color:var(--ink3);margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase">5-day forecast</div>
+        <div class="forecast-row"><div class="fc-day">Mon</div><div class="fc-track"><div class="fc-fill" style="width:72%;background:var(--teal)"></div></div><div class="fc-num" style="color:var(--teal)">720</div></div>
+        <div class="forecast-row"><div class="fc-day">Tue</div><div class="fc-track"><div class="fc-fill" style="width:85%;background:var(--teal)"></div></div><div class="fc-num" style="color:var(--teal)">850</div></div>
+        <div class="forecast-row"><div class="fc-day">Wed</div><div class="fc-track"><div class="fc-fill" style="width:60%;background:var(--amber)"></div></div><div class="fc-num" style="color:var(--amber)">600</div></div>
+        <div class="forecast-row"><div class="fc-day">Thu</div><div class="fc-track"><div class="fc-fill" style="width:90%;background:var(--teal)"></div></div><div class="fc-num" style="color:var(--teal)">900</div></div>
+        <div class="forecast-row"><div class="fc-day">Fri</div><div class="fc-track"><div class="fc-fill" style="width:52%;background:var(--red)"></div></div><div class="fc-num" style="color:var(--red)">520</div></div>
+
+        <div class="alert-card">
+          <div class="alert-ic">⚡</div>
+          <div>
+            <div class="alert-t">AI recommendation</div>
+            <div class="alert-s">Reduce Friday order 20% · saves est. $320</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="rcard">
+        <div class="rcard-head">
+          <div class="rcard-head-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          What universities get
+        </div>
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Real-time waste dashboard</strong> — waste rates by station, meal period, and day. See exactly where overproduction happens.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>AI consumption forecast</strong> — 5-day predictions feed directly into the existing 3–5 day ordering system. Smarter buying, less surplus.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Cost impact reports</strong> — every pound of waste translated to dollars. The ROI of each behavioral shift is visible.</div></div>
+        <div class="step"><div class="step-num ghost">★</div><div class="step-body"><strong>Anonymous aggregate only</strong> — fully FERPA-compliant. No student PII, just trends that drive decisions.</div></div>
+      </div>
+      <div class="rcard">
+        <div class="rcard-head">
+          <div class="rcard-head-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          ISU pilot — projected annual savings
+        </div>
+        <div class="metric-row"><span class="metric-lbl">Food cost reduction</span><span class="metric-val t">$180K</span></div>
+        <div class="metric-row"><span class="metric-lbl">Waste management saved</span><span class="metric-val t">$42K</span></div>
+        <div class="metric-row"><span class="metric-lbl">Lbs food waste prevented</span><span class="metric-val t">~200K</span></div>
+        <div class="metric-row"><span class="metric-lbl">CO₂e avoided</span><span class="metric-val t">~120 tons</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OFF-CAMPUS -->
+  <div class="pane" id="pane-offcampus">
+    <div class="phone-wrap">
+      <div class="ph-bar">
+        <span class="ph-time">7:30 PM</span>
+        <div class="ph-notch"></div>
+        <span class="ph-time">●●●</span>
+      </div>
+      <div class="ph-body">
+        <div class="ph-header">
+          <div>
+            <div class="ph-greeting">My kitchen</div>
+            <div class="ph-name">Jordan R.</div>
+          </div>
+          <div class="av">JR</div>
+        </div>
+
+        <div class="scan-hero">
+          <div class="scan-frame">📷</div>
+          <div class="scan-label">
+            <strong>Scan a barcode or snap a photo</strong>
+            AI identifies item + estimates freshness
+          </div>
+        </div>
+
+        <div class="scan-item">
+          <div class="scan-thumb">🥛</div>
+          <div style="flex:1">
+            <div class="scan-name">Whole milk, 1 gal</div>
+            <div class="scan-meta">Added 4 days ago · exp. in 2 days</div>
+          </div>
+          <div class="food-pill" style="background:var(--amber-dim);color:var(--amber)">Use soon</div>
+        </div>
+        <div class="scan-item">
+          <div class="scan-thumb">🫑</div>
+          <div style="flex:1">
+            <div class="scan-name">Bell peppers ×3</div>
+            <div class="scan-meta">Added yesterday · ~5 days left</div>
+          </div>
+          <div class="food-pill" style="background:var(--teal-dim);color:var(--teal-mid)">Fresh</div>
+        </div>
+        <div class="scan-item">
+          <div class="scan-thumb">🍗</div>
+          <div style="flex:1">
+            <div class="scan-name">Chicken breast</div>
+            <div class="scan-meta">Added 5 days ago · use today</div>
+          </div>
+          <div class="food-pill" style="background:var(--red-dim);color:var(--red)">Use or freeze</div>
+        </div>
+
+        <div class="recipe-card">
+          <div class="recipe-ic">🍳</div>
+          <div>
+            <div class="recipe-t">Recipe ready for tonight</div>
+            <div class="recipe-s">Chicken stir-fry with peppers + rice</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="rcard">
+        <div class="rcard-head">
+          <div class="rcard-head-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          Off-campus features (Jr / Sr)
+        </div>
+        <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Pantry scanner</strong> — scan barcodes or photograph items. AI reads expiry dates and freshness, flags what to use first.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Use-first alerts</strong> — push notifications before anything expires. "Your chicken needs to be used or frozen tonight."</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Smart grocery list</strong> — set household size, preferences, and budget. AI generates a list calibrated to what you'll actually finish.</div></div>
+        <div class="step"><div class="step-num ghost">★</div><div class="step-body"><strong>Zero-waste recipes</strong> — suggests what to cook using what's already in your fridge, so nothing spoils.</div></div>
+      </div>
+      <div class="rcard">
+        <div class="rcard-head">
+          <div class="rcard-head-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+          Full platform impact
+        </div>
+        <div class="metric-row"><span class="metric-lbl">Students served (ISU pilot)</span><span class="metric-val">4,200</span></div>
+        <div class="metric-row"><span class="metric-lbl">Estimated waste reduction</span><span class="metric-val t">25–40%</span></div>
+        <div class="metric-row"><span class="metric-lbl">Surplus routed to food pantry</span><span class="metric-val t">+30%</span></div>
+        <div class="metric-row"><span class="metric-lbl">Scale path</span><span class="metric-val" style="font-size:12px">ISU → Illinois → National</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCALE -->
+<div class="sec-title"><h2>Feasibility & scale</h2></div>
+<div class="scale-wrap">
+  <div class="scale-grid">
+    <div class="scale-card"><div class="scale-icon">🔒</div><h4>Privacy first</h4><p>Anonymous aggregate data only. No personal tracking. FERPA-compliant from launch.</p></div>
+    <div class="scale-card"><div class="scale-icon">⚖️</div><h4>No punishment</h4><p>WisePoints reward good behavior. Education and incentives only — never penalties.</p></div>
+    <div class="scale-card"><div class="scale-icon">🌱</div><h4>Equity built in</h4><p>Credits redeemable at campus food pantry. Surplus data feeds BN Food Rescue network.</p></div>
+    <div class="scale-card"><div class="scale-icon">📈</div><h4>ISU → national</h4><p>Pilot at ISU first. Each campus adds to the AI training dataset, improving predictions universally.</p><div class="scale-num">5,000+ unis</div></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-card">
+    <h2>Start at ISU. Scale everywhere.</h2>
+    <p>WasteWise turns dining data into financial savings, environmental impact, and real student agency — simultaneously.</p>
+    <div class="cta-btns">
+      <button class="cta-primary">See the ISU pilot plan</button>
+      <button class="cta-ghost">View full deck</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(id, el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pane-'+id).classList.add('active');
+}
+</script>
+</body>
+</html>
